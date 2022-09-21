@@ -12,14 +12,22 @@ fn main() {
                 .required(true)
                 .min_values(1),
         )
-        /* .arg(
+        .arg(
             Arg::with_name("repeat")
                 .short("r")
                 .long("repeat")
                 .value_name("REPEAT")
                 .help("Repeat the input text")
-                .takes_value(true),
-        ) */
+                .takes_value(true)
+                .default_value("1")
+                .min_values(1)
+                .max_values(1)
+                .validator(|s| {
+                    s.parse::<u32>()
+                        .map(|_| ())
+                        .map_err(|e| e.to_string())
+                }),
+        )
         .arg(
             Arg::with_name("omit_newline")
                 .short("n")
@@ -33,5 +41,8 @@ fn main() {
 
     let omit_newline = matches.is_present("omit_newline");
 
-    println!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
+    for _ in 0..matches.value_of("repeat").unwrap().parse::<u32>().unwrap() {
+        print!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
+    }
+    
 }
