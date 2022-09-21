@@ -23,6 +23,7 @@ fn main() {
         .arg(
             Arg::with_name("omit_newline")
                 .short("n")
+                .long("omit-newline")
                 .help("Do not print the trailing newline")
                 .takes_value(false),
         )
