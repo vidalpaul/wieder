@@ -65,3 +65,14 @@ fn hello1() -> TestResult {
  cmd.arg("Hello there").assert().success().stdout(expected);
  Ok(())
 }
+
+#[test]
+fn hello2() -> TestResult {
+ let expected = fs::read_to_string("tests/expected/hello2.txt")?;
+ let mut cmd = Command::cargo_bin("wieder")?;
+ cmd.args(vec!["Hello", "there"])
+ .assert()
+ .success()
+ .stdout(expected);
+ Ok(())
+}
