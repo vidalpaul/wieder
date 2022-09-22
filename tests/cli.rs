@@ -7,7 +7,7 @@ type TestResult = Result<(), Box<dyn std::error::Error>>;
 #[test]
 fn dies_no_args() -> TestResult {
     Command::cargo_bin("wieder")
-        .unwrap()
+        ?
         .assert()
         .failure()
         .stderr(predicate::str::contains("USAGE"));
@@ -17,7 +17,7 @@ fn dies_no_args() -> TestResult {
 #[test]
 fn dies_no_text() -> TestResult {
     Command::cargo_bin("wieder")
-        .unwrap()
+        ?
         .arg("-r")
         .arg("2")
         .assert()
@@ -29,7 +29,7 @@ fn dies_no_text() -> TestResult {
 #[test]
 fn dies_invalid_repeat() -> TestResult {
     Command::cargo_bin("wieder")
-        .unwrap()
+        ?
         .arg("-r")
         .arg("foo")
         .arg("bar")
@@ -41,14 +41,14 @@ fn dies_invalid_repeat() -> TestResult {
 
 #[test]
 fn runs() -> TestResult {
- let mut cmd = Command::cargo_bin("wieder").unwrap();
+ let mut cmd = Command::cargo_bin("wieder")?;
  cmd.arg("hello").assert().success();
     Ok(())
 }
 
 #[test]
 fn runs_repeat() -> TestResult {
-    let mut cmd = Command::cargo_bin("wieder").unwrap();
+    let mut cmd = Command::cargo_bin("wieder")?;
     cmd.arg("-r=2")
         .arg("hello")
         .assert()
@@ -60,8 +60,8 @@ fn runs_repeat() -> TestResult {
 #[test]
 fn hello1() -> TestResult {
  let outfile = "tests/expected/hello1.txt";
- let expected = fs::read_to_string(outfile).unwrap();
- let mut cmd = Command::cargo_bin("wieder").unwrap();
+ let expected = fs::read_to_string(outfile)?;
+ let mut cmd = Command::cargo_bin("wieder")?;
  cmd.arg("Hello there").assert().success().stdout(expected);
  Ok(())
 }
