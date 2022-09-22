@@ -20,3 +20,15 @@ fn dies_no_text() {
         .failure()
         .stderr(predicate::str::contains("USAGE"));
 }
+
+#[test]
+fn dies_invalid_repeat() {
+    Command::cargo_bin("wieder")
+        .unwrap()
+        .arg("-r")
+        .arg("foo")
+        .arg("bar")
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains("USAGE"));
+}
