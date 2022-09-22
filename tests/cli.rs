@@ -57,22 +57,30 @@ fn runs_repeat() -> TestResult {
     Ok(())
 }
 
-#[test]
-fn hello1() -> TestResult {
- let outfile = "tests/expected/hello1.txt";
- let expected = fs::read_to_string(outfile)?;
- let mut cmd = Command::cargo_bin("wieder")?;
- cmd.arg("Hello there").assert().success().stdout(expected);
- Ok(())
-}
+// Helper test fn
+fn run(args: &[&str], expected_file: &str) -> TestResult {
+    let expected = fs::read_to_string(expected_file)?;
+    Command::cargo_bin("wieder")?
+    .args(args)
+    .assert()
+    .success()
+    .stdout(expected);
+    Ok(())
+   }
 
 #[test]
+fn hello1() -> TestResult {
+ run(&["Hello there"], "tests/expected/hello1.txt")
+}
+#[test]
 fn hello2() -> TestResult {
- let expected = fs::read_to_string("tests/expected/hello2.txt")?;
- let mut cmd = Command::cargo_bin("wieder")?;
- cmd.args(vec!["Hello", "there"])
- .assert()
- .success()
- .stdout(expected);
- Ok(())
+ run(&["Hello", "there"], "tests/expected/hello2.txt")
+}
+#[test]
+fn hello1_no_newline() -> TestResult {
+ run(&["-n", "Hello there"], "tests/expected/hello1.n.txt")
+}
+#[test]
+fn hello2_no_newline() -> TestResult {
+ run(&["-n", "Hello", "there"], "tests/expected/hello2.n.txt")
 }
